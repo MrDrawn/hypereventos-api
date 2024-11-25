@@ -48,7 +48,7 @@ export default class HylexPayProvider {
       data: {
         amount: Number(amount.toFixed(2)),
         description: 'Pagamento de pix',
-        postbackUrl: 'https://api.vivadesorteoficial.com/notification/hylexpay',
+        postbackUrl: 'https://api.hypereventos.com/notification/hylexpay',
         customer: {
           name: client.name || 'Fulano de Tal',
           document: client.document || '11111111111',
