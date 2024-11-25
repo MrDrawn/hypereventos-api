@@ -18,6 +18,7 @@ model User {
 
   tickets UserTicket[]
   booths  UserBooth[]
+  transactions Transaction[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -125,4 +126,31 @@ model Booth {
 
   @@index([id, eventId])
   @@map("booths")
+}
+
+model Transaction {
+  id          String  @id @unique @default(uuid())
+  userId     String 
+  amount Float  
+  paymentMethod String
+  reference  String
+  items     String
+  status   TransactionStatus
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([id, userId])
+  @@map("transactions")
+
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
 }

@@ -20,6 +20,43 @@ export class NotificationService {
       );
     }
 
+    const transaction = await this.prismaService.transaction.findFirst({
+      where: {
+        reference: transactionId,
+      },
+    });
+
+    if (!transaction) {
+      throw new HttpException(
+        'Transação não encontrada.',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (transaction.status === 'APPROVED') {
+      throw new HttpException('Transação já aprovada.', HttpStatus.BAD_REQUEST);
+    }
+
+    await this.prismaService.transaction.update({
+      where: {
+        id: transactionId,
+      },
+      data: {
+        status: 'APPROVED',
+      },
+    });
+
+    const itemsArray = JSON.parse(transaction.items);
+
+    for await (const item of itemsArray) {
+      await this.prismaService.userTicket.create({
+        data: {
+          userId: transaction.userId,
+          ticketId: item.id,
+        },
+      });
+    }
+
     return {
       message: 'Pagamento aprovado com sucesso.',
     };
