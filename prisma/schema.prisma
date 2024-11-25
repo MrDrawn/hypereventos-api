@@ -1,0 +1,83 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @unique @default(uuid())
+  name     String
+  email    String   @unique
+  password String
+  role     UserRole
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  CLIENT
+}
+
+model Event {
+  id          String   @id @unique @default(uuid())
+  name        String
+  image       String
+  description String
+  location    String
+  date        DateTime
+  slug        String   @unique
+  isActive    Boolean  @default(true) @map("is_active")
+
+  tickets Ticket[]
+  booths  Booth[]
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+}
+
+model Ticket {
+  id       String @id @unique @default(uuid())
+  name     String
+  price    Float
+  discount Float?
+  quantity Int
+  eventId  String
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([id, eventId])
+  @@map("tickets")
+}
+
+model Booth {
+  id          String  @id @unique @default(uuid())
+  name        String
+  location    String
+  price       Float
+  discount    Float?
+  wristbands  Int
+  eventId     String
+  isAvailable Boolean @default(true)
+
+  event Event @relation(fields: [eventId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([id, eventId])
+  @@map("booths")
+}
