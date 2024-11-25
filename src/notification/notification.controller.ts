@@ -16,15 +16,4 @@ export class NotificationController {
 
     return await this.notificationService.hylexPay(hylexPayData);
   }
-
-  @HttpCode(HttpStatus.OK)
-  @Post('/suitpay')
-  async suitpay(
-    @Body()
-    suitPayData: any,
-  ) {
-    console.log(suitPayData);
-
-    return await this.notificationService.suitPayData(suitPayData);
-  }
 }

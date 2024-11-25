@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   getHello() {
     return {
-      name: 'API',
+      name: 'HyperEventos API',
       version: '1.0.0',
     };
   }

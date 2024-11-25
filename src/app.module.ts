@@ -6,10 +6,8 @@ import { AppService } from './app.service';
 
 import { PrismaModule } from './prisma/prisma.module';
 
-import { OrderModule } from './order/order.module';
-
 @Module({
-  imports: [PrismaModule, OrderModule],
+  imports: [PrismaModule],
   controllers: [AppController],
   providers: [AppService],
 })
