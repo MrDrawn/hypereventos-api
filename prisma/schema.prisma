@@ -11,19 +11,58 @@ model User {
   id       String   @id @unique @default(uuid())
   name     String
   email    String   @unique
+  phone    String
   password String
   role     UserRole
+  isActive Boolean  @default(true) @map("is_active")
+
+  tickets UserTicket[]
+  booths  UserBooth[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
+  @@index([id, email], name: "user_index")
   @@map("users")
 }
 
 enum UserRole {
   ADMIN
   CLIENT
+}
+
+model UserTicket {
+  id       String @id @unique @default(uuid())
+  userId   String
+  ticketId String
+
+  user   User   @relation(fields: [userId], references: [id])
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([id, userId, ticketId])
+  @@map("user_tickets")
+}
+
+model UserBooth {
+  id         String @id @unique @default(uuid())
+  userId     String
+  boothId    String
+  wristbands Int
+
+  user  User  @relation(fields: [userId], references: [id])
+  booth Booth @relation(fields: [boothId], references: [id])
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@index([id, userId, boothId])
+  @@map("user_booths")
 }
 
 model Event {
@@ -52,7 +91,8 @@ model Ticket {
   quantity Int
   eventId  String
 
-  event Event @relation(fields: [eventId], references: [id])
+  event       Event        @relation(fields: [eventId], references: [id])
+  userTickets UserTicket[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
@@ -72,7 +112,8 @@ model Booth {
   eventId     String
   isAvailable Boolean @default(true)
 
-  event Event @relation(fields: [eventId], references: [id])
+  event      Event       @relation(fields: [eventId], references: [id])
+  userBooths UserBooth[]
 
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
