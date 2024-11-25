@@ -1,7 +1,7 @@
 FROM node:21
 
 # set working directory
-WORKDIR /usr/src/viva-api
+WORKDIR /usr/src/hypereventos-api
 
 # change timezone
 ARG TZ=America/Sao_Paulo
@@ -20,6 +20,6 @@ RUN yarn build
 RUN yarn prisma migrate deploy
 RUN yarn prisma generate
 
-EXPOSE 3312
+EXPOSE 3314
 
 CMD ["yarn", "start"]
