@@ -59,6 +59,10 @@ export class EventService {
       where: {
         slug,
       },
+      include: {
+        tickets: true,
+        booths: true,
+      },
     });
 
     if (!event) {
