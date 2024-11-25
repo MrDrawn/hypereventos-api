@@ -49,10 +49,11 @@ model UserTicket {
 }
 
 model UserBooth {
-  id         String @id @unique @default(uuid())
-  userId     String
-  boothId    String
-  wristbands Int
+  id                  String @id @unique @default(uuid())
+  userId              String
+  boothId             String
+  wristbands          Int
+  wristbandsAllocated Int    @default(0) @map("wristbands_allocated")
 
   user  User  @relation(fields: [userId], references: [id])
   booth Booth @relation(fields: [boothId], references: [id])
