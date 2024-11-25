@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -52,5 +52,19 @@ export class EventService {
       page,
       limit,
     };
+  }
+
+  async findBySlug(slug: string) {
+    const event = await this.prismaService.event.findUnique({
+      where: {
+        slug,
+      },
+    });
+
+    if (!event) {
+      throw new HttpException('O evento não foi encontrado.', 404);
+    }
+
+    return event;
   }
 }

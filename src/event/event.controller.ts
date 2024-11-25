@@ -1,4 +1,11 @@
-import { Controller, Get, HttpCode, HttpStatus, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Query,
+} from '@nestjs/common';
 
 import { EventService } from './event.service';
 
@@ -22,5 +29,11 @@ export class EventController {
       limit: limitNumber,
       search,
     });
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Get(':slug')
+  async findBySlug(@Param('slug') slug: string) {
+    return await this.eventService.findBySlug(slug);
   }
 }
