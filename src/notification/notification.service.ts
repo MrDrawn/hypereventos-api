@@ -39,7 +39,7 @@ export class NotificationService {
 
     await this.prismaService.transaction.update({
       where: {
-        id: transactionId,
+        id: transaction.id,
       },
       data: {
         status: 'APPROVED',
