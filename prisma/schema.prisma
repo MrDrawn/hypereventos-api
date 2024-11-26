@@ -94,7 +94,7 @@ model Ticket {
   price    Float
   discount Float?
   quantity Int
-  eventId  String
+  eventId  String @map("event_id")
 
   event       Event        @relation(fields: [eventId], references: [id])
   userTickets UserTicket[]
