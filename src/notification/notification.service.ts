@@ -46,9 +46,16 @@ export class NotificationService {
       },
     });
 
-    const itemsArray = JSON.parse(transaction.items);
+    const itemsArray: {
+      id: string;
+      type: string;
+      lot: number;
+      price: number;
+      quantity: number;
+      itemTotal: number;
+    }[] = JSON.parse(transaction.items);
 
-    for await (const item of itemsArray) {
+    itemsArray.forEach(async (item) => {
       for (let i = 0; i < item.quantity; i++) {
         await this.prismaService.userTicket.create({
           data: {
@@ -68,7 +75,7 @@ export class NotificationService {
           },
         },
       });
-    }
+    });
 
     return {
       message: 'Pagamento aprovado com sucesso.',
