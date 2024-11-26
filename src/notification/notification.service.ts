@@ -49,12 +49,14 @@ export class NotificationService {
     const itemsArray = JSON.parse(transaction.items);
 
     for await (const item of itemsArray) {
-      await this.prismaService.userTicket.create({
-        data: {
-          userId: transaction.userId,
-          ticketId: item.id,
-        },
-      });
+      for (let i = 0; i < item.quantity; i++) {
+        await this.prismaService.userTicket.create({
+          data: {
+            userId: transaction.userId,
+            ticketId: item.id,
+          },
+        });
+      }
     }
 
     return {
