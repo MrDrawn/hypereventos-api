@@ -57,6 +57,17 @@ export class NotificationService {
           },
         });
       }
+
+      await this.prismaService.ticket.update({
+        where: {
+          id: item.id,
+        },
+        data: {
+          quantity: {
+            decrement: item.quantity,
+          },
+        },
+      });
     }
 
     return {
