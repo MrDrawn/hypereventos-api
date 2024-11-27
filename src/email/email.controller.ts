@@ -42,4 +42,18 @@ export class EmailController {
 
     return { message: 'All emails sending' };
   }
+
+  @HttpCode(HttpStatus.OK)
+  @Get('test2')
+  async sendTest2() {
+    await this.emailService.sendTicketEmail(
+      'lipelimasilva220@gmail.com',
+      'Felipe',
+      'asdasdasasdsa',
+      'Evento teste',
+      'Ingresso teste',
+    );
+
+    return { message: 'All emails sending' };
+  }
 }
