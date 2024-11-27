@@ -11,22 +11,18 @@ import { PrismaModule } from './prisma/prisma.module';
 import { EventModule } from './event/event.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { NotificationModule } from './notification/notification.module';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    BullModule.forRoot({
-      connection: {
-        host: 'localhost',
-        port: 6379,
-      },
-    }),
     PrismaModule,
     EventModule,
     CheckoutModule,
     NotificationModule,
+    EmailModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,10 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { EmailService } from 'src/email/email.service';
 
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class NotificationService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   async hylexPay(hylexPayData: {
     transactionId: string;
@@ -37,6 +41,16 @@ export class NotificationService {
       throw new HttpException('Transação já aprovada.', HttpStatus.BAD_REQUEST);
     }
 
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: transaction.userId,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('Usuário não encontrado.', HttpStatus.NOT_FOUND);
+    }
+
     await this.prismaService.transaction.update({
       where: {
         id: transaction.id,
@@ -57,12 +71,36 @@ export class NotificationService {
 
     itemsArray.forEach(async (item) => {
       for (let i = 0; i < item.quantity; i++) {
-        await this.prismaService.userTicket.create({
+        const ticket = await this.prismaService.ticket.findFirst({
+          where: {
+            id: item.id,
+          },
+          include: {
+            event: true,
+          },
+        });
+
+        if (!ticket) {
+          throw new HttpException(
+            'Ingresso não encontrado.',
+            HttpStatus.NOT_FOUND,
+          );
+        }
+
+        const userTicket = await this.prismaService.userTicket.create({
           data: {
             userId: transaction.userId,
             ticketId: item.id,
           },
         });
+
+        await this.emailService.sendTicketEmail(
+          user.email,
+          user.name,
+          userTicket.id,
+          ticket.event.name,
+          ticket.name,
+        );
       }
 
       await this.prismaService.ticket.update({
