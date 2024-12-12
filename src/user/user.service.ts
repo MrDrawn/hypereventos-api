@@ -12,7 +12,11 @@ export class UserService {
         id,
       },
       include: {
-        ticket: true,
+        ticket: {
+          include: {
+            event: true,
+          },
+        },
         user: true,
       },
     });
@@ -33,7 +37,11 @@ export class UserService {
         id,
       },
       include: {
-        ticket: true,
+        ticket: {
+          include: {
+            event: true,
+          },
+        },
         user: true,
       },
     });
