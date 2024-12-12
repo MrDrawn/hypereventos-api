@@ -12,6 +12,7 @@ import { EventModule } from './event/event.module';
 import { CheckoutModule } from './checkout/checkout.module';
 import { NotificationModule } from './notification/notification.module';
 import { EmailModule } from './email/email.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { EmailModule } from './email/email.module';
     CheckoutModule,
     NotificationModule,
     EmailModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
