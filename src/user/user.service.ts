@@ -11,6 +11,10 @@ export class UserService {
       where: {
         id,
       },
+      include: {
+        ticket: true,
+        user: true,
+      },
     });
 
     if (!ticket) {
@@ -27,6 +31,10 @@ export class UserService {
     const ticket = await this.prismaService.userTicket.findUnique({
       where: {
         id,
+      },
+      include: {
+        ticket: true,
+        user: true,
       },
     });
 
