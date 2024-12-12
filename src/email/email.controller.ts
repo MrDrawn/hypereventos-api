@@ -47,11 +47,11 @@ export class EmailController {
   @Get('test2')
   async sendTest2() {
     await this.emailService.sendTicketEmail(
-      'lipelimasilva220@gmail.com',
-      'Felipe',
-      'asdasdasasdsa',
-      'Evento teste',
-      'Ingresso teste',
+      'anninha.machado04@gmail.com',
+      'Ana Clara Machado',
+      'fdc3a78b-61b1-4b95-a814-4a31d1fbb1a5',
+      'Eletro Funk Led',
+      '1 INGRESSO FEMININO',
     );
 
     return { message: 'All emails sending' };
